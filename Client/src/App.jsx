@@ -1,32 +1,34 @@
-import './App.css'
-import ChatInput from './chat/ChatInput'
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Header from "./Auth/Header.jsx"
-import { GoogleOAuthProvider } from "@react-oauth/google"
-import Login from './Auth/Login'
-import { useAuth } from './context/CreateContext.jsx'
-import { profile } from './Api/api'
-import { useEffect } from 'react'
-import UserProfileCard from './Auth/Profile'
-import { History } from './chat/History.jsx'
+// src/App.jsx
+import './App.css';
+import { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
+import Header from './Auth/Header';
+import Login from './Auth/Login';
+import UserProfileCard from './Auth/Profile';
+import ChatInput from './chat/ChatInput';
+import { History } from './chat/History';
+import PrivateRoute from './private.routes';
+
+import { useAuth } from './context/CreateContext';
+import { profile } from './Api/api';
+import PageNotFound from './chat/PageNotFound';
 
 function App() {
-  const { login } = useAuth()
+  const { login } = useAuth();
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchProfile = async () => {
       try {
         const { data } = await profile();
-
-        login(data.user)
-
+        login(data.user);
       } catch (error) {
-        console.log(error?.response?.data?.message);
+        console.log(error?.response?.data?.message || "Not authenticated");
       }
-    }
-    fetch();
-  }, [])
+    };
+    fetchProfile();
+  }, []);
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
@@ -34,10 +36,26 @@ function App() {
         <Routes>
           <Route path="/" element={<Header />}>
             <Route index element={<ChatInput />} />
-            <Route path="/sign-up" element={<ChatInput />} />
             <Route path="/sign-in" element={<Login />} />
-            <Route path="/me" element={<UserProfileCard />} />
-            <Route path="/history" element={<History />} />
+            <Route path="*" element={<PageNotFound />} />
+
+            <Route
+              path="/me"
+              element={
+                <PrivateRoute>
+                  <UserProfileCard />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/history"
+              element={
+                <PrivateRoute>
+                  <History />
+                </PrivateRoute>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>
