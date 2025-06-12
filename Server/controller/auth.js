@@ -25,7 +25,8 @@ exports.GoogleLogin = async (req, res, next) => {
     }
 
     const token = await genrateToken({ type: "authenticated", id: user._id, email }, process.env.SECRET_TOKEN_KEY);
-    res.cookie("auth_Token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+       res.cookie("auth_Token", token, {httpOnly: true,secure: true,sameSite: "None",maxAge: 7 * 24 * 60 * 60 * 1000});
+
     return res.status(200).json({ success: true, message: "logged in successfully", user })
 }
 
