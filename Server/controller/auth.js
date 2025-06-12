@@ -6,8 +6,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 
 exports.GoogleLogin = async (req, res, next) => {
     const { code } = req.query;
-    if (code) {
-        res.clearCookie('trial_token');
+    if (code) { res.clearCookie('trial_token',{ httpOnly: true,secure: true,sameSite: 'None'});
     }
     const { tokens } = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens);
@@ -46,7 +45,7 @@ exports.profile = async (req, res, next) => {
 exports.logout = async (req, res, next) => {
     let { auth_Token } = req.cookies;
     if (auth_Token) {
-        res.clearCookie("auth_Token")
+        res.clearCookie("auth_Token",{ httpOnly: true,secure: true,sameSite: 'None'})
     }
     return res.status(200).json({ success: true, statusCode: 200, message: "logout successfully", user: null })
 }
