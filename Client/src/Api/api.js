@@ -1,7 +1,9 @@
 import axios from "axios";
+const path = import.meta.env.VITE_BACKEND_URL
+console.log(path)
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api/v1",
+    baseURL: `${path}/api/v1`,
     withCredentials: true
 })
 
@@ -16,7 +18,7 @@ export const profile = () => api.get("/me");
 
 // History -
 
-export const userHistory = (currentPage, limit) => api.get("/history")
+export const userHistory = () => api.get("/history")
 
 // logout Api -
 export const logoutApi = () => api.post("/logout");
