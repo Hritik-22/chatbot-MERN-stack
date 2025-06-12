@@ -55,7 +55,7 @@ exports.aiModel = async (req, res, next) => {
         }
 
         // Set updated trial token if needed
-        if (updatedToken) { res.cookie("trial_token", updatedToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }) }
+        if (updatedToken) { res.cookie("trial_token", updatedToken, { httpOnly: true, secure: true,sameSite: "None", maxAge: 24 * 60 * 60 * 1000 }) }
         return res.status(200).json({ success: true, statusCode: 200, message: "Bot Response", htmlContent });
 
     } catch (error) {
