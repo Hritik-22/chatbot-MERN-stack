@@ -122,4 +122,5 @@ npm start
 
 
 > Built by Ritik Dubey  
->  [Website](https:www.ritik.top) | [GitHub](https://github.com/Hritik-22)
+> <a href="https://www.ritik.top" target="_blank">Website</a> | <a href="https://github.com/Hritik-22" target="_blank">GitHub</a>
+
